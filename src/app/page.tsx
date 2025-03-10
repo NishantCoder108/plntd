@@ -1,5 +1,6 @@
 "use client";
 import AppForm from "@/components/AppForm";
+import TradeCard from "@/components/trading/Trading";
 import TradingViewLightweight from "@/components/TradingChart";
 import User from "@/components/User";
 import { useSocket } from "@/contexts/socketContext";
@@ -27,24 +28,27 @@ export default function Home() {
 
   return (
     <div>
-      <div className="h-[30rem] w-full relative">
-        <TradingViewLightweight
-          symbol={"AAPL"}
-          // timeframe={
-          //   selectedTimeFrame?.tradingViewValue
-          //     ? `${selectedTimeFrame?.tradingViewValue}m`
-          //     : "60m"
-          // }
+      <div className="flex">
+        <div className="h-[30rem]  relative w-[70%] gap-6  ">
+          <TradingViewLightweight
+            symbol={"AAPL"}
+            // timeframe={
+            //   selectedTimeFrame?.tradingViewValue
+            //     ? `${selectedTimeFrame?.tradingViewValue}m`
+            //     : "60m"
+            // }
 
-          timeframe={"60m"}
-        />
+            timeframe={"60m"}
+          />
+        </div>
+        <div className="w-[30%] pl-4">
+          {/* <AppForm /> */}
+          <TradeCard />
+        </div>
       </div>
 
       <div>
         <User />
-      </div>
-      <div>
-        <AppForm />
       </div>
     </div>
   );
