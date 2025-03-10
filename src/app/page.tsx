@@ -1,6 +1,7 @@
 "use client";
 import AppForm from "@/components/AppForm";
 import TradingViewLightweight from "@/components/TradingChart";
+import User from "@/components/User";
 import { useSocket } from "@/contexts/socketContext";
 import { useEffect } from "react";
 
@@ -37,6 +38,10 @@ export default function Home() {
 
           timeframe={"60m"}
         />
+      </div>
+
+      <div>
+        <User />
       </div>
       <div>
         <AppForm />
