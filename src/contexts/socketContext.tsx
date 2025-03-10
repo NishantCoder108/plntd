@@ -1,55 +1,28 @@
-"use client";
-
+import { WEBHOOK_URL } from "@/constants/wallet";
+import { createContext, useContext, useEffect, useState } from "react";
 import { io, Socket } from "socket.io-client";
-import React, { createContext, useContext, useEffect, useState } from "react";
 
-const SOCKET_URL =
-  process.env.NEXT_PUBLIC_SOCKET_URL || "http://localhost:4000";
-
-export const socket = io(SOCKET_URL, {
-  autoConnect: false,
-});
-
-type SocketContextType = {
-  socket: Socket;
-  isConnected: boolean;
-};
-
-export const SocketContext = createContext<SocketContextType>({
-  socket,
-  isConnected: false,
-});
+const SocketContext = createContext<Socket | null>(null);
 
 export const useSocket = () => {
   return useContext(SocketContext);
 };
 
 export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
-  const [isConnected, setIsConnected] = useState(socket.connected);
+  const [socket, setSocket] = useState<Socket | null>(null);
 
   useEffect(() => {
-    function onConnect() {
-      setIsConnected(true);
-    }
+    const newSocket = io(WEBHOOK_URL);
 
-    function onDisconnect() {
-      setIsConnected(false);
-    }
-
-    socket.connect();
-    socket.on("connect", onConnect);
-    socket.on("disconnect", onDisconnect);
+    console.log({ newSocket });
+    setSocket(newSocket);
 
     return () => {
-      socket.off("connect", onConnect);
-      socket.off("disconnect", onDisconnect);
-      socket.disconnect();
+      newSocket.disconnect();
     };
   }, []);
 
   return (
-    <SocketContext.Provider value={{ socket, isConnected }}>
-      {children}
-    </SocketContext.Provider>
+    <SocketContext.Provider value={socket}>{children}</SocketContext.Provider>
   );
 };

@@ -29,6 +29,9 @@ export const env = createEnv({
     // SPORTSDATA_API_KEY: z.string(),
     // PRIVATE_KEY: z.string(),
     // CRON_SECRET: z.string(),
+    // TOKEN_MINT_ADDRESS: z.string(),
+    // MINTER_PUBLIC_KEY: z.string(),
+    // WEBHOOK_URL: z.string(),
   },
 
   /**
@@ -38,6 +41,10 @@ export const env = createEnv({
    */
   client: {
     // NEXT_PUBLIC_CLIENTVAR: z.string(),
+    NEXT_PUBLIC_RPC_URL: z.string().url().optional(),
+    NEXT_PUBLIC_TOKEN_MINT_ADDRESS: z.string(),
+    NEXT_PUBLIC_MINTER_PUBLIC_KEY: z.string(),
+    NEXT_PUBLIC_WEBHOOK_URL: z.string(),
   },
 
   /**
@@ -45,6 +52,10 @@ export const env = createEnv({
    * middlewares) or client-side so we need to destruct manually.
    */
   runtimeEnv: {
+    NEXT_PUBLIC_TOKEN_MINT_ADDRESS: process.env.NEXT_PUBLIC_TOKEN_MINT_ADDRESS,
+    NEXT_PUBLIC_MINTER_PUBLIC_KEY: process.env.NEXT_PUBLIC_MINTER_PUBLIC_KEY,
+    NEXT_PUBLIC_WEBHOOK_URL: process.env.NEXT_PUBLIC_WEBHOOK_URL,
+    NEXT_PUBLIC_RPC_URL: process.env.NEXT_PUBLIC_RPC_URL,
     // DATABASE_URL: process.env.DATABASE_URL,
     NEXT_CHART_API_URL: process.env.NEXT_PUBLIC_API_URL,
     NODE_ENV: process.env.NODE_ENV,

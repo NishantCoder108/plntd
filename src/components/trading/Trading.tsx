@@ -14,6 +14,7 @@ import { ArrowRightLeft, DollarSign, Leaf, Upload, Wallet } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import Image from "next/image";
 import toast from "react-hot-toast";
+import { useWallet } from "@solana/wallet-adapter-react";
 
 const TradeCard = () => {
   const [amount, setAmount] = useState<string>("");
@@ -21,9 +22,11 @@ const TradeCard = () => {
   const [image, setImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [showSuccess, setShowSuccess] = useState<boolean>(false);
-  const [walletAddress, setWalletAddress] = useState<string>("");
   const [isWalletConnected, setIsWalletConnected] = useState<boolean>(false);
 
+  const { publicKey, connected, disconnect } = useWallet();
+
+  const walletAddress = publicKey?.toString() || "Connect wallet ";
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
@@ -37,18 +40,26 @@ const TradeCard = () => {
     }
   };
 
-  const handleConnectWallet = () => {
-    const mockAddress = "7XjnSaGTjPFvbVPKzjXWcQUxRkWMGL9xkGHfpxzuWYb3";
-    setWalletAddress(mockAddress);
-    setIsWalletConnected(true);
+  //   const handleConnectWallet = () => {
+  //     if (!publicKey) {
+  //       // toast({
+  //       // toast({
+  //       //   title: "Wallet Connected",
+  //       //   description: `Connected to ${publicKey?.slice(0, 6)}...${publicKey?.slice(-4)}`,
+  //       // });
 
-    // toast({
-    //   title: "Wallet Connected",
-    //   description: `Connected to ${mockAddress.slice(0, 6)}...${mockAddress.slice(-4)}`,
-    // });
+  //       toast("Wallet Connected");
+  //       setIsWalletConnected(true);
+  //     } else {
+  //       // toast({
+  //       //   title: "Wallet Disconnected",
+  //       //   description: "Wallet disconnected successfully",
+  //       // });
 
-    toast("Wallet Connected");
-  };
+  //       toast("Wallet Disconnected");
+  //       setIsWalletConnected(false);
+  //     }
+  //   };
 
   const handleTrade = (type: "buy" | "sell") => {
     if (!amount || isNaN(Number(amount)) || Number(amount) <= 0) {
@@ -168,20 +179,7 @@ const TradeCard = () => {
                   Wallet Address
                 </Label>
                 <div className="flex items-center gap-2">
-                  <div className="flex-1 bg-gray-100 dark:bg-gray-800 rounded-md p-2 text-sm truncate font-mono">
-                    {isWalletConnected ? walletAddress : "Not connected"}
-                  </div>
-                  {!isWalletConnected && (
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={handleConnectWallet}
-                      className="border-green-200 text-green-800 hover:bg-green-50 dark:border-green-800 dark:text-green-400 whitespace-nowrap"
-                    >
-                      <Wallet className="h-4 w-4 mr-2" />
-                      Connect
-                    </Button>
-                  )}
+                  <Input type="text" disabled value={walletAddress} />
                 </div>
               </div>
 
@@ -262,7 +260,7 @@ const TradeCard = () => {
 
             <div className="pt-4">
               <Button
-                className="w-full btn-green-gradient"
+                className="w-full bg-green-100 hover:bg-green-200 btn-green-gradient text-green-600 border border-green-200"
                 disabled={showSuccess}
                 onClick={() => handleTrade("buy")}
               >

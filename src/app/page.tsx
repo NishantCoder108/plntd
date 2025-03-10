@@ -7,24 +7,24 @@ import { useSocket } from "@/contexts/socketContext";
 import { useEffect } from "react";
 
 export default function Home() {
-  const { socket, isConnected } = useSocket();
+  // const { socket, isConnected } = useSocket();
 
-  useEffect(() => {
-    if (!isConnected) return;
+  // useEffect(() => {
+  //   if (!isConnected) return;
 
-    socket.on("test", (data) => {
-      console.log("Received test message:", data);
-    });
+  //   socket.on("test", (data) => {
+  //     console.log("Received test message:", data);
+  //   });
 
-    const interval = setInterval(() => {
-      socket.emit("test", "Hello from the client!");
-    }, 2000);
+  //   const interval = setInterval(() => {
+  //     socket.emit("test", "Hello from the client!");
+  //   }, 2000);
 
-    return () => {
-      socket.off("test");
-      clearInterval(interval);
-    };
-  }, [socket, isConnected]);
+  //   return () => {
+  //     socket.off("test");
+  //     clearInterval(interval);
+  //   };
+  // }, [socket, isConnected]);
 
   return (
     <div>
@@ -42,7 +42,6 @@ export default function Home() {
           />
         </div>
         <div className="w-[30%] pl-4">
-          {/* <AppForm /> */}
           <TradeCard />
         </div>
       </div>
