@@ -15,9 +15,9 @@ export default function Providers({ children }: { children: React.ReactNode }) {
   return (
     <>
       {/* // <SessionProvider> */}
-      <SolanaProvider>
-        <TRPCReactProvider>
-          <ReactQueryProvider>
+      <TRPCReactProvider>
+        <ReactQueryProvider>
+          <SolanaProvider>
             {/* <Toaster /> */}
             <NextSSRPlugin
               /**
@@ -28,14 +28,13 @@ export default function Providers({ children }: { children: React.ReactNode }) {
                */
               routerConfig={extractRouterConfig(ourFileRouter)}
             />
-            <SocketProvider>
-              <Navbar />
-              {children}
-            </SocketProvider>
-            ;
-          </ReactQueryProvider>
-        </TRPCReactProvider>
-      </SolanaProvider>
+            {/* <SocketProvider> */}
+            <Navbar />
+            {children}
+            {/* </SocketProvider> */};
+          </SolanaProvider>
+        </ReactQueryProvider>
+      </TRPCReactProvider>
       {/* // </SessionProvider> */}
     </>
   );

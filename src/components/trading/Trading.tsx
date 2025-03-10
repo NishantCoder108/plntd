@@ -14,7 +14,19 @@ import { ArrowRightLeft, DollarSign, Leaf, Upload, Wallet } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import Image from "next/image";
 import toast from "react-hot-toast";
-import { useWallet } from "@solana/wallet-adapter-react";
+import { useConnection, useWallet } from "@solana/wallet-adapter-react";
+import { validateTradeInputs } from "@/lib/tradeform";
+import {
+  LAMPORTS_PER_SOL,
+  PublicKey,
+  SystemProgram,
+  Transaction,
+} from "@solana/web3.js";
+import {
+  getAssociatedTokenAddress,
+  TOKEN_2022_PROGRAM_ID,
+} from "@solana/spl-token";
+import { MINTER_PUBLIC_KEY, TOKEN_MINT_ADDRESS } from "@/constants/wallet";
 
 const TradeCard = () => {
   const [amount, setAmount] = useState<string>("");
@@ -22,13 +34,13 @@ const TradeCard = () => {
   const [image, setImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [showSuccess, setShowSuccess] = useState<boolean>(false);
-  const [isWalletConnected, setIsWalletConnected] = useState<boolean>(false);
 
-  const { publicKey, connected, disconnect } = useWallet();
-
-  const walletAddress = publicKey?.toString() || "Connect wallet ";
+  const { publicKey, connected, disconnect, sendTransaction } = useWallet();
+  const { connection } = useConnection();
+  //   console.log({ publicKey });
+  const walletAddress = publicKey?.toString() || null;
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
+    if (e.target.files && e.target.files.length > 0) {
       const file = e.target.files[0];
       setImage(file);
 
@@ -37,6 +49,9 @@ const TradeCard = () => {
         setImagePreview(reader.result as string);
       };
       reader.readAsDataURL(file);
+    } else {
+      // Handle case where no file is selected
+      toast.error("No file selected. Please choose an image.");
     }
   };
 
@@ -61,68 +76,70 @@ const TradeCard = () => {
   //     }
   //   };
 
-  const handleTrade = (type: "buy" | "sell") => {
-    if (!amount || isNaN(Number(amount)) || Number(amount) <= 0) {
-      //   toast({
-      //     title: "Invalid amount",
-      //     description: "Please enter a valid amount greater than 0",
-      //     variant: "destructive",
-      //   });
-      toast.error("Please enter a valid amount greater than 0");
+  const handleTrade = async (type: "buy" | "sell") => {
+    if (!publicKey) {
+      toast.error("Please connect your wallet to continue");
       return;
     }
+    const isValid = validateTradeInputs(amount, name, image, connected);
+    if (!isValid) return;
 
-    if (type === "buy") {
-      if (!name.trim()) {
-        // toast({
-        //   title: "Name required",
-        //   description: "Please enter your name",
-        //   variant: "destructive",
-        // });
+    // setShowSuccess(true);
+    // toast(type === "buy" ? "Tokens Purchased!" : "Tokens Sold!");
 
-        toast.error("Please enter your name");
-        return;
-      }
+    // setTimeout(() => {
+    //   setAmount("");
+    //   setShowSuccess(false);
+    //   if (type === "buy") {
+    //     setName("");
+    //     setImage(null);
+    //     setImagePreview(null);
+    //   }
+    // }, 3000);
 
-      if (!image) {
-        // toast({
-        //   title: "Image required",
-        //   description: "Please upload a picture of a tree",
-        //   variant: "destructive",
-        // });
-        toast.error("Please upload a picture of a tree");
-        return;
-      }
+    if (type === "sell") return;
+    try {
+      const walletPubKey = new PublicKey(MINTER_PUBLIC_KEY);
+      const tokenMint = new PublicKey(TOKEN_MINT_ADDRESS);
 
-      if (!isWalletConnected) {
-        // toast({
-        //   title: "Wallet not connected",
-        //   description: "Please connect your wallet to continue",
-        //   variant: "destructive",
-        // });
-        toast.error("Please connect your wallet to continue");
-        return;
-      }
+      const associatedTokenAdd = await getAssociatedTokenAddress(
+        tokenMint,
+        walletPubKey,
+        false,
+        TOKEN_2022_PROGRAM_ID
+      );
+
+      console.log("associatedTokenAdd", associatedTokenAdd.toString());
+
+      const transaction = new Transaction().add(
+        SystemProgram.transfer({
+          fromPubkey: publicKey,
+          toPubkey: associatedTokenAdd,
+          lamports: Number(amount) * LAMPORTS_PER_SOL,
+        })
+      );
+
+      const { blockhash, lastValidBlockHeight } =
+        await connection.getLatestBlockhash();
+      transaction.recentBlockhash = blockhash;
+      transaction.feePayer = publicKey;
+
+      const signature = await sendTransaction(transaction, connection);
+
+      console.log({ signature });
+
+      const confirmTransaction = await connection.confirmTransaction(
+        { signature, blockhash, lastValidBlockHeight },
+        "processed"
+      );
+
+      console.log({ confirmTransaction });
+
+      toast.success("Tokens Purchased!");
+    } catch (error) {
+      toast.error("Something went wrong. Please try again");
+      console.log(error);
     }
-
-    setShowSuccess(true);
-
-    // toast({
-    //   title: type === 'buy' ? "Tokens Purchased!" : "Tokens Sold!",
-    //   description: `Successfully ${type === 'buy' ? 'bought' : 'sold'} ${amount} #PLNTD tokens`,
-    //   variant: "default",
-    // });
-
-    toast(type === "buy" ? "Tokens Purchased!" : "Tokens Sold!");
-    setTimeout(() => {
-      setAmount("");
-      setShowSuccess(false);
-      if (type === "buy") {
-        setName("");
-        setImage(null);
-        setImagePreview(null);
-      }
-    }, 3000);
   };
 
   return (
@@ -261,7 +278,7 @@ const TradeCard = () => {
             <div className="pt-4">
               <Button
                 className="w-full bg-green-100 hover:bg-green-200 btn-green-gradient text-green-600 border border-green-200"
-                disabled={showSuccess}
+                disabled={!connected || showSuccess}
                 onClick={() => handleTrade("buy")}
               >
                 {showSuccess ? "Processing..." : "Buy #PLNTD Tokens"}
@@ -300,7 +317,7 @@ const TradeCard = () => {
             <div className="pt-4">
               <Button
                 className="w-full bg-rose-100 hover:bg-rose-200 text-rose-600 border border-rose-200"
-                disabled={showSuccess}
+                disabled={!connected || showSuccess}
                 onClick={() => handleTrade("sell")}
               >
                 {showSuccess ? "Processing..." : "Sell #PLNTD Tokens"}
