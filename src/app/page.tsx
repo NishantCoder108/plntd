@@ -27,7 +27,7 @@ export default function Home() {
   // }, [socket, isConnected]);
 
   return (
-    <div>
+    <div className="bg-[#1E1E1E]">
       <div className="flex">
         <div className="h-[30rem]  relative w-[70%] gap-6  ">
           <TradingViewLightweight
