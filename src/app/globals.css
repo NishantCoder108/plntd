@@ -4,7 +4,7 @@
 
 @custom-variant dark (&:is(.dark *));
 
-@theme inline {
+/* @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
@@ -43,7 +43,7 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
-}
+} */
 
 /* :root {
   --background: oklch(1 0 0);
@@ -126,10 +126,29 @@
   }
 } */
 
-
-
-@layer base {
+/* @layer base {
   :root {
+    --text: #0a0a0a;
+    --background: #e0e0e0;
+    --primary: #92d3ae;
+    --secondary: #88eef2;
+    --accent: #abd095;
+  }
+
+  .dark {
+    --text: #F5F5F5;
+    --background: #1E1E1E;
+    --primary: #2c6d48;
+    --secondary: #0D7377;
+    --accent: #44692f;
+  }
+} */
+
+
+
+
+/* @layer base { */
+/* :root {
     --background: 0 0% 100%;
     --foreground: 240 10% 3.9%;
     --card: 0 0% 100%;
@@ -155,10 +174,12 @@
     --chart-3: 197 37% 24%;
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
-  }
+  } */
 
-  .dark {
-    --background: 20 14.3% 4.1%;
+/* .dark  */
+
+/* :root {
+    --background: #1E1E1E;
     --foreground: 0 0% 95%;
     --card: 24 9.8% 10%;
     --card-foreground: 0 0% 95%;
@@ -183,4 +204,27 @@
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
   }
-}
+} */
+
+/* 
+@layer base {
+
+
+
+  :root {
+    --text: #F5F5F5;
+    --background: #1E1E1E;
+    --primary: #2c6d48;
+    --secondary: #0D7377;
+    --accent: #44692f;
+  }
+
+  .dark {
+    --text: #0a0a0a;
+    --background: #e0e0e0;
+    --primary: #92d3ae;
+    --secondary: #88eef2;
+    --accent: #abd095;
+  }
+
+} */
