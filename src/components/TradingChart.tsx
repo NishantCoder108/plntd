@@ -18,7 +18,7 @@ import axios from "axios";
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 enum AccentColor {
-  GREEN = "#2a9d90",
+  GREEN = "#2C6D48",
   RED = "#e76e50",
   GRAY = "#e6e6e6",
   PINK = "#E91E63",
@@ -101,12 +101,19 @@ const TradingViewLightweight = ({ symbol, timeframe }: any) => {
   useEffect(() => {
     if (!chartContainerRef?.current || graphData.length == 0) return;
     const colorMap = fetchColor({
-      background: "hsl(var(--background))",
-      foreground: "hsl(var(--foreground))",
-      muted: "hsl(var(--muted))",
-      mutedForeground: "hsl(var(--muted-foreground))",
+      // background: "hsl(var(--background))",
+      // foreground: "hsl(var(--foreground))",
+      // muted: "hsl(var(--muted))",
+      // mutedForeground: "hsl(var(--muted-foreground))",
+      // transparent: "#ffffffff",
+
+      background: "#282828",
+      foreground: "#f5f5f5",
+      muted: "#CC3502",
+      mutedForeground: "#f5f5f5",
       transparent: "#ffffffff",
     });
+    // 0d7477
     // const chart = createChart(chartContainerRef.current, {
     //   // width: 800,
     //   // height: 400,
@@ -158,7 +165,7 @@ const TradingViewLightweight = ({ symbol, timeframe }: any) => {
     });
 
     const lineSeries = chart.addSeries(CandlestickSeries, {
-      baseLineColor: "#ff5567",
+      baseLineColor: "#A3DE83",
     });
 
     lineSeries.applyOptions({
@@ -174,40 +181,28 @@ const TradingViewLightweight = ({ symbol, timeframe }: any) => {
     // );
 
     lineSeries.setData([...graphData]);
-    const volumeSeries = chart.addSeries(HistogramSeries);
+    // const volumeSeries = chart.addSeries(HistogramSeries);
 
-    // const volumeSeries = chart.addHistogramSeries({
+    // volumeSeries.applyOptions({
     //   color: "#26a69a",
     //   priceFormat: {
     //     type: "volume",
     //   },
     //   priceScaleId: "", // set as an overlay by setting a blank priceScaleId
-    //   // set the positioning of the volume series
-    //   // scaleMargins: {
-    //   //   top: 0.7, // highest point of the series will be 70% away from the top
-    //   //   bottom: 0,
-    //   // },
     // });
-    volumeSeries.applyOptions({
-      color: "#26a69a",
-      priceFormat: {
-        type: "volume",
-      },
-      priceScaleId: "", // set as an overlay by setting a blank priceScaleId
-    });
-    volumeSeries.priceScale().applyOptions({
-      scaleMargins: {
-        top: 0.7, // highest point of the series will be 70% away from the top
-        bottom: 0,
-      },
-    });
+    // volumeSeries.priceScale().applyOptions({
+    //   scaleMargins: {
+    //     top: 0.7, // highest point of the series will be 70% away from the top
+    //     bottom: 0,
+    //   },
+    // });
+    // volumeSeries.setData([...volumeData]);
 
     // let graphDataNew = graphData;
     // ?.sort(
     //   (a: any, b: any) =>
     //     new Date(a.time).getTime() - new Date(b.time).getTime()
     // );
-    volumeSeries.setData([...volumeData]);
 
     // let markedData: any = [];
 
@@ -258,10 +253,10 @@ const TradingViewLightweight = ({ symbol, timeframe }: any) => {
       },
       grid: {
         horzLines: {
-          visible: true,
+          visible: false,
         },
         vertLines: {
-          visible: true,
+          visible: false,
         },
       },
 
@@ -305,7 +300,7 @@ const TradingViewLightweight = ({ symbol, timeframe }: any) => {
   }, [chartContainerRef, loading, loadingData, graphData, symbol, timeframe]);
 
   return loading || loadingData ? (
-    <div className="f-full h-full flex items-center justify-center">
+    <div className="f-full h-full flex items-center text-white justify-center">
       {/* <Loader /> */}
       Loading...
     </div>
@@ -315,7 +310,11 @@ const TradingViewLightweight = ({ symbol, timeframe }: any) => {
       style={{
         position: "absolute",
         width: "100%",
-        height: "100%",
+        height: "30rem",
+        // marginBottom: "5rem",
+        // border: "2px solid red",
+        // paddingBottom: "5rem",
+        // borderRadius: "2rem",
       }}
     />
   );
