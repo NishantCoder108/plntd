@@ -1,18 +1,18 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Roboto } from "next/font/google";
+import { Roboto } from "next/font/google";
 import "./globals.css";
 import Providers from "./provider";
 import { Suspense } from "react";
 import { Toaster } from "react-hot-toast";
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
+// const geistSans = Geist({
+//   variable: "--font-geist-sans",
+//   subsets: ["latin"],
+// });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+// const geistMono = Geist_Mono({
+//   variable: "--font-geist-mono",
+//   subsets: ["latin"],
+// });
 const roboto = Roboto({
   variable: "--font-roboto",
   subsets: ["latin"],
@@ -29,9 +29,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`bg-[#1E1E1E] px-8 py-4 ${geistSans.variable} ${geistMono.variable} ${roboto.variable} antialiased`}
-      >
+      <body className={`bg-[#1E1E1E] px-8 py-4 ${roboto.variable} antialiased`}>
         <Providers>
           <Suspense
             fallback={
