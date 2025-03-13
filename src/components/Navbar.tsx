@@ -40,7 +40,7 @@ export default Navbar;
 const connectedStyle = {
   height: "2.5rem",
   width: "10rem",
-  fontSize: ".875rem",
+  fontSize: "1rem",
   borderRadius: "2rem",
   fontFamily: "var(--font-roboto)",
   cursor: "pointer",
@@ -50,7 +50,7 @@ const connectedStyle = {
 const disconnectedStyle = {
   height: "2.5rem",
   width: "10rem",
-  fontSize: ".875rem",
+  fontSize: "1rem",
   border: ".5px solid gray",
   fontFamily: "var(--font-roboto)",
   background: "#A3DE83",

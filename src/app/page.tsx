@@ -48,7 +48,7 @@ export default function Home() {
           <TradeToken />
         </div>
       </div>
-      <div>
+      <div className="mt-20">
         <TransactionTable />
       </div>
       {/* <div>
