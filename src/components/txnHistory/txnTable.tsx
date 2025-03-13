@@ -13,13 +13,14 @@ import { Button } from "@/components/ui/button";
 import { api } from "@/trpc/react";
 import Link from "next/link";
 import { formatString } from "@/lib/utils";
+import { TransactionSkeletonLoader } from "../common/TableSkeleton";
 
 export default function TransactionTable() {
   const { data, isLoading, error } = api.txns.readLatestTxns.useQuery({
     state: "LATEST",
   });
 
-  if (isLoading) return <p> Loading table...</p>;
+  if (isLoading) return <TransactionSkeletonLoader />;
 
   if (error) return <p> Error: {error.message}</p>;
 
@@ -51,13 +52,15 @@ export default function TransactionTable() {
                   <TableCell className="py-4">{transaction.id}</TableCell>
                   <TableCell className="py-4">{transaction.amount}</TableCell>
                   <TableCell className="py-4 text-center">
-                    {transaction.from}
+                    {formatString(transaction.from, 5, 5)}
                   </TableCell>
                   <TableCell className="py-4 text-center">
-                    {transaction.to}
+                    {formatString(transaction.to, 5, 5)}
                   </TableCell>
                   <TableCell className="whitespace-nowrap text-center py-4">
-                    {transaction.timestamp}
+                    {new Date(
+                      Number(transaction.timestamp) * 1000
+                    ).toLocaleString()}
                   </TableCell>
                   <TableCell>
                     <div className="flex items-center justify-center gap-2">
