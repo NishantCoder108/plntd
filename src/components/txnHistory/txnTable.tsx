@@ -1,7 +1,6 @@
 "use client";
 
-import { useState } from "react";
-import { Copy } from "lucide-react";
+import { ExternalLink } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -11,109 +10,74 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-// import {
-//   Pagination,
-//   PaginationContent,
-//   PaginationItem,
-//   PaginationLink,
-//   PaginationNext,
-//   PaginationPrevious,
-// } from "@/components/ui/pagination"
-
-interface Transaction {
-  id: number;
-  amount: string;
-  from: string;
-  to: string;
-  timestamp: string;
-  signature: string;
-}
+import { api } from "@/trpc/react";
+import Link from "next/link";
+import { formatString } from "@/lib/utils";
 
 export default function TransactionTable() {
-  const [transactions, setTransactions] = useState<Transaction[]>([
-    {
-      id: 1,
-      amount: "0.1 SOL",
-      from: "9RNQ...K4fy",
-      to: "K4fy...jY8d",
-      timestamp: "March 11, 2025, 12:38:24 UTC",
-      signature: "5jgJ..nTds",
-    },
-    {
-      id: 2,
-      amount: "0.1 SOL",
-      from: "9RNQ...K4fy",
-      to: "K4fy...jY8d",
-      timestamp: "March 11, 2025, 12:38:24 UTC",
-      signature: "5jgJ..nTds",
-    },
-    {
-      id: 3,
-      amount: "0.1 SOL",
-      from: "9RNQ...K4fy",
-      to: "K4fy...jY8d",
-      timestamp: "March 11, 2025, 12:38:24 UTC",
-      signature: "5jgJ..nTds",
-    },
-    {
-      id: 4,
-      amount: "0.5 SOL",
-      from: "8KLM...P3zy",
-      to: "J7rt...kL9p",
-      timestamp: "March 11, 2025, 11:45:12 UTC",
-      signature: "7hgT..mRds",
-    },
-    {
-      id: 5,
-      amount: "1.2 SOL",
-      from: "3QWE...R7ty",
-      to: "N5fg...pO2q",
-      timestamp: "March 10, 2025, 09:22:45 UTC",
-      signature: "9jkL..pTws",
-    },
-  ]);
+  const { data, isLoading, error } = api.txns.readLatestTxns.useQuery({
+    state: "LATEST",
+  });
 
-  const copyToClipboard = (text: string) => {
-    navigator.clipboard.writeText(text);
-  };
+  if (isLoading) return <p> Loading table...</p>;
 
+  if (error) return <p> Error: {error.message}</p>;
+
+  const latestTxns = data?.latestTxns || [];
   return (
     <div className="w-full p-4 space-y-4 text-white">
-      <div className="rounded-lg border bg-card">
+      <div className="">
         <div className="relative w-full overflow-auto">
+          <h1 className="text-xl font-bold  py-2 px-2 text-[#A3DE83]">
+            Latest Transaction
+          </h1>
           <Table>
             <TableHeader>
-              <TableRow className="bg-muted/50">
+              <TableRow className="bg-muted/50 border-none font-bold text-base">
                 <TableHead className="w-[80px] font-medium">S.no</TableHead>
-                <TableHead className="font-medium">Amount</TableHead>
-                <TableHead className="font-medium">From</TableHead>
-                <TableHead className="font-medium">To</TableHead>
-                <TableHead className="font-medium">Timestamp</TableHead>
-                <TableHead className="font-medium">Signature</TableHead>
+                <TableHead className="font-bold ">Amount</TableHead>
+                <TableHead className="text-center">From</TableHead>
+                <TableHead className="text-center">To</TableHead>
+                <TableHead className="text-center">Timestamp</TableHead>
+                <TableHead className="text-center ">Signature</TableHead>
               </TableRow>
             </TableHeader>
-            <TableBody>
-              {transactions.map((transaction) => (
-                <TableRow key={transaction.id}>
-                  <TableCell>{transaction.id}</TableCell>
-                  <TableCell>{transaction.amount}</TableCell>
-                  <TableCell>{transaction.from}</TableCell>
-                  <TableCell>{transaction.to}</TableCell>
-                  <TableCell className="whitespace-nowrap">
+            <TableBody className="">
+              {latestTxns.map((transaction) => (
+                <TableRow
+                  key={transaction.id}
+                  className=" border-none hover:bg-muted/50 "
+                >
+                  <TableCell className="py-4">{transaction.id}</TableCell>
+                  <TableCell className="py-4">{transaction.amount}</TableCell>
+                  <TableCell className="py-4 text-center">
+                    {transaction.from}
+                  </TableCell>
+                  <TableCell className="py-4 text-center">
+                    {transaction.to}
+                  </TableCell>
+                  <TableCell className="whitespace-nowrap text-center py-4">
                     {transaction.timestamp}
                   </TableCell>
                   <TableCell>
-                    <div className="flex items-center gap-2">
-                      <span>{transaction.signature}</span>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-6 w-6"
-                        onClick={() => copyToClipboard(transaction.signature)}
+                    <div className="flex items-center justify-center gap-2">
+                      <span>{formatString(transaction.signature, 5, 5)}</span>
+                      <Link
+                        href={`https://explorer.solana.com/tx/${transaction.signature}?cluster=devnet`}
+                        passHref
+                        target="_blank"
                       >
-                        <Copy className="h-3.5 w-3.5" />
-                        <span className="sr-only">Copy signature</span>
-                      </Button>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-6 w-6 cursor-pointer hover:scale-110 transition"
+                        >
+                          <ExternalLink className="h-3.5 w-3.5" />
+                          <span className="sr-only">
+                            View on Solana Explorer
+                          </span>
+                        </Button>
+                      </Link>
                     </div>
                   </TableCell>
                 </TableRow>
@@ -122,27 +86,6 @@ export default function TransactionTable() {
           </Table>
         </div>
       </div>
-      {/* <Pagination>
-        <PaginationContent>
-          <PaginationItem>
-            <PaginationPrevious href="#" />
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationLink href="#">1</PaginationLink>
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationLink href="#" isActive>
-              2
-            </PaginationLink>
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationLink href="#">3</PaginationLink>
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationNext href="#" />
-          </PaginationItem>
-        </PaginationContent>
-      </Pagination> */}
     </div>
   );
 }
