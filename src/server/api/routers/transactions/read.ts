@@ -14,8 +14,6 @@ export const readLatestTxns = publicProcedure
       take: input.state === "LATEST" ? 5 : undefined,
     });
 
-    console.log("latestTxns", latestTxns);
-
     const formattedTxns = latestTxns.map((txn, idx) => ({
       id: idx + 1,
       amount: `${Number(txn.amount) / 1000000000} ${
