@@ -143,13 +143,11 @@ const TradeCard = () => {
   };
 
   return (
-    <Card className="glass-card w-full  rounded-none border-none">
+    <Card className="glass-card w-full text-white  rounded-none border-none">
       <CardHeader>
         <div className="flex items-center space-x-2 mb-2">
-          <Leaf className="h-5 w-5 text-green-600 animate-pulse-green" />
-          <CardTitle className="text-xl text-green-800 dark:text-green-400">
-            Trade #PLNTD Tokens
-          </CardTitle>
+          <Leaf className="h-5 w-5 t animate-pulse-green" />
+          <CardTitle className="text-xl ">Trade #PLNTD Tokens</CardTitle>
         </div>
         <CardDescription>
           Buy or sell #PLNTD tokens to support global reforestation efforts

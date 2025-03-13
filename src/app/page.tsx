@@ -1,7 +1,9 @@
 "use client";
 import AppForm from "@/components/AppForm";
+import TradeToken from "@/components/trading/TradeToken";
 import TradeCard from "@/components/trading/Trading";
 import TradingViewLightweight from "@/components/TradingChart";
+import TransactionTable from "@/components/txnHistory/txnTable";
 import User from "@/components/User";
 import { useSocket } from "@/contexts/socketContext";
 import { useEffect } from "react";
@@ -27,9 +29,9 @@ export default function Home() {
   // }, [socket, isConnected]);
 
   return (
-    <div className="bg-[#1E1E1E]">
-      <div className="flex">
-        <div className="h-[30rem]  relative w-[70%] gap-6  ">
+    <div className="">
+      <div className="flex flex-col md:flex-row gap-4 md:gap-8 ">
+        <div className="h-[31rem]  relative w-[70%] overflow-hidden  py-4 bg-[#282828] rounded-4xl ">
           <TradingViewLightweight
             symbol={"AAPL"}
             // timeframe={
@@ -41,14 +43,17 @@ export default function Home() {
             timeframe={"60m"}
           />
         </div>
-        <div className="w-[30%] pl-4">
-          <TradeCard />
+        <div className="w-[30%] ">
+          {/* <TradeCard /> */}
+          <TradeToken />
         </div>
       </div>
-
       <div>
-        <User />
+        <TransactionTable />
       </div>
+      {/* <div>
+        <User />
+      </div> */}
     </div>
   );
 }
