@@ -66,7 +66,7 @@ export default function TransactionTable() {
                     <div className="flex items-center justify-center gap-2">
                       <span>{formatString(transaction.signature, 5, 5)}</span>
                       <Link
-                        href={`https://explorer.solana.com/tx/${transaction.signature}?cluster=devnet`}
+                        href={`https://solscan.io/tx/${transaction.signature}?cluster=devnet`}
                         passHref
                         target="_blank"
                       >
