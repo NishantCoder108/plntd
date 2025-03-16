@@ -16,9 +16,10 @@ export const readLatestTxns = publicProcedure
 
     const formattedTxns = latestTxns.map((txn, idx) => ({
       id: idx + 1,
-      amount: `${Number(txn.amount) / 1000000000} ${
-        txn.txnType === "MINT" ? "SOL" : "PLNTD"
-      }`,
+      amount:
+        txn.txnType === "MINT"
+          ? `${Number(txn.amount) / 1000000000} SOL`
+          : `${Number(txn.amount) / 1000000} PLANTD`,
       from: txn.fromUserAccount,
       to: txn.toUserAccount,
       timestamp: txn.txnTimestamp,
