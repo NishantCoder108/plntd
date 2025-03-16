@@ -45,6 +45,7 @@ export const env = createEnv({
     NEXT_PUBLIC_TOKEN_MINT_ADDRESS: z.string(),
     NEXT_PUBLIC_MINTER_PUBLIC_KEY: z.string(),
     NEXT_PUBLIC_WEBHOOK_URL: z.string(),
+    NEXT_PUBLIC_PLNTD_SOL_ADDRESS: z.string(),
   },
 
   /**
@@ -52,6 +53,7 @@ export const env = createEnv({
    * middlewares) or client-side so we need to destruct manually.
    */
   runtimeEnv: {
+    NEXT_PUBLIC_PLNTD_SOL_ADDRESS: process.env.NEXT_PUBLIC_PLNTD_SOL_ADDRESS,
     NEXT_PUBLIC_TOKEN_MINT_ADDRESS: process.env.NEXT_PUBLIC_TOKEN_MINT_ADDRESS,
     NEXT_PUBLIC_MINTER_PUBLIC_KEY: process.env.NEXT_PUBLIC_MINTER_PUBLIC_KEY,
     NEXT_PUBLIC_WEBHOOK_URL: process.env.NEXT_PUBLIC_WEBHOOK_URL,
