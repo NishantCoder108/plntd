@@ -39,7 +39,7 @@ const TradeCard = ({
               type="number"
               min="0.01"
               step="0.01"
-              defaultValue="1"
+              defaultValue={inputValue}
               className="text-4xl font-bold bg-transparent w-24 focus:outline-none focus:border-b focus:border-[#A6E264]"
               onChange={(e) => {
                 const value = Number.parseFloat(e.target.value);
