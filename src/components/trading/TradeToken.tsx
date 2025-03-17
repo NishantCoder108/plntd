@@ -8,9 +8,12 @@ import plntd_token from "/public/plntd_token.svg";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import toast from "react-hot-toast";
 import {
+  clusterApiUrl,
+  ComputeBudgetProgram,
   Connection,
   LAMPORTS_PER_SOL,
   PublicKey,
+  sendAndConfirmTransaction,
   SystemProgram,
   Transaction,
 } from "@solana/web3.js";
@@ -21,29 +24,35 @@ import {
   TOKEN_MINT_ADDRESS,
 } from "@/constants/wallet";
 import {
+  createAssociatedTokenAccountInstruction,
+  createTransferCheckedInstruction,
   createTransferInstruction,
   getAccount,
   getAssociatedTokenAddress,
+  getOrCreateAssociatedTokenAccount,
   TOKEN_2022_PROGRAM_ID,
+  transferChecked,
 } from "@solana/spl-token";
 import { formatString } from "@/lib/utils";
+import Link from "next/link";
 
 export default function TradeToken() {
   const [activeTab, setActiveTab] = useState<"buy" | "sell">("buy");
   const [solAmount, setSolAmount] = useState<string>("1");
   const [plntdAmount, setPlntdAmount] = useState<string>("0.5");
-  const wallet = useWallet();
-  const { publicKey, sendTransaction } = wallet;
   const { connection } = useConnection();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [plntdBalance, setPlntdBalance] = useState<number>(0);
   const [solBalance, setSolBalance] = useState<number>(0);
 
+  const { publicKey, sendTransaction, signTransaction, wallet } = useWallet();
+
+  const conn = new Connection(RPC_URL);
+
   const getStakedTokenBalance = async (
     walletAddress: PublicKey
   ): Promise<number> => {
     try {
-      const conn = new Connection(RPC_URL);
       const walletPubkey = walletAddress;
       const tokenMintPubkey = new PublicKey(TOKEN_MINT_ADDRESS);
 
@@ -109,22 +118,28 @@ export default function TradeToken() {
       const transaction = new Transaction().add(
         SystemProgram.transfer({
           fromPubkey: publicKey,
-          toPubkey: new PublicKey(PLNTD_SOL_ADDRESS),
+          toPubkey: new PublicKey(MINTER_PUBLIC_KEY),
           lamports: Number(solAmount) * LAMPORTS_PER_SOL,
         })
       );
 
-      const { blockhash, lastValidBlockHeight } =
-        await connection.getLatestBlockhash();
+      const { blockhash } = await connection.getLatestBlockhash();
       transaction.recentBlockhash = blockhash;
       transaction.feePayer = publicKey;
 
       const signature = await sendTransaction(transaction, connection);
 
       console.log({ signature });
-
+      const {
+        blockhash: confirmBlockhash,
+        lastValidBlockHeight: confirmLastValidBlockHeight,
+      } = await connection.getLatestBlockhash();
       const confirmTransaction = await connection.confirmTransaction(
-        { signature, blockhash, lastValidBlockHeight },
+        {
+          signature,
+          blockhash: confirmBlockhash,
+          lastValidBlockHeight: confirmLastValidBlockHeight,
+        },
         "confirmed"
       );
 
@@ -189,24 +204,24 @@ export default function TradeToken() {
 
       console.log("recipientATA address : ", recipientATA.toString());
 
-      const transferIx = createTransferInstruction(
-        senderATA,
-        recipientATA,
-        publicKey,
-        Number(plntdAmount) * 1000000, // This will convert 0.5 to 500000
-        [publicKey],
-        TOKEN_2022_PROGRAM_ID
-      );
-
-      const transaction = new Transaction().add(transferIx);
-
       const { blockhash, lastValidBlockHeight } =
         await connection.getLatestBlockhash();
+      const txns = new Transaction().add(
+        createTransferCheckedInstruction(
+          senderATA, // from (should be a token account)
+          tokenMint, // mint
+          recipientATA, // to (should be a token account)
+          publicKey, // from's owner
+          Number(plntdAmount) * 1000000,
+          6,
+          [],
+          TOKEN_2022_PROGRAM_ID
+        )
+      );
 
-      transaction.recentBlockhash = blockhash;
-      transaction.feePayer = publicKey;
-
-      const signature = await sendTransaction(transaction, connection);
+      txns.recentBlockhash = blockhash;
+      txns.feePayer = publicKey;
+      const signature = await sendTransaction(txns, connection);
 
       console.log({ signature });
 
