@@ -8,33 +8,24 @@ import plntd_token from "/public/plntd_token.svg";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import toast from "react-hot-toast";
 import {
-  clusterApiUrl,
-  ComputeBudgetProgram,
   Connection,
   LAMPORTS_PER_SOL,
   PublicKey,
-  sendAndConfirmTransaction,
   SystemProgram,
   Transaction,
 } from "@solana/web3.js";
 import {
   MINTER_PUBLIC_KEY,
-  PLNTD_SOL_ADDRESS,
   RPC_URL,
   TOKEN_MINT_ADDRESS,
 } from "@/constants/wallet";
 import {
-  createAssociatedTokenAccountInstruction,
   createTransferCheckedInstruction,
-  createTransferInstruction,
   getAccount,
   getAssociatedTokenAddress,
-  getOrCreateAssociatedTokenAccount,
   TOKEN_2022_PROGRAM_ID,
-  transferChecked,
 } from "@solana/spl-token";
 import { formatString } from "@/lib/utils";
-import Link from "next/link";
 
 export default function TradeToken() {
   const [activeTab, setActiveTab] = useState<"buy" | "sell">("buy");
@@ -45,7 +36,7 @@ export default function TradeToken() {
   const [plntdBalance, setPlntdBalance] = useState<number>(0);
   const [solBalance, setSolBalance] = useState<number>(0);
 
-  const { publicKey, sendTransaction, signTransaction, wallet } = useWallet();
+  const { publicKey, sendTransaction } = useWallet();
 
   const conn = new Connection(RPC_URL);
 
