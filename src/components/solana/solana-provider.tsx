@@ -6,11 +6,6 @@ import {
 import "@solana/wallet-adapter-react-ui/styles.css";
 
 function SolanaProvider({ children }: { children: React.ReactNode }) {
-  // if (process.env.NODE_ENV === "production") {
-  //   console.log = () => { };
-  //   console.warn = () => { };
-  //   console.error = () => { };
-  // }
   return (
     <ConnectionProvider endpoint={RPC_URL}>
       <WalletProvider wallets={[]} autoConnect>

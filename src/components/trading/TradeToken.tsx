@@ -136,7 +136,18 @@ export default function TradeToken() {
 
       console.log({ confirmTransaction });
 
-      toast.success("Tokens Purchased!");
+      toast.loading(
+        `Initializing token transfer for ${formatString(
+          publicKey.toString(),
+          5,
+          5
+        )}`,
+        {
+          style: {
+            fontSize: "14px",
+          },
+        }
+      );
       setIsLoading(false);
       getStakedTokenBalance(publicKey);
       fetchUserBalance(publicKey);
@@ -223,12 +234,17 @@ export default function TradeToken() {
 
       console.log({ confirmTransaction });
 
-      toast.success(
-        `Transaction successful with signature: ${formatString(
-          signature,
+      toast.loading(
+        `Initializing token transfer for ${formatString(
+          publicKey.toString(),
           5,
           5
-        )}`
+        )}`,
+        {
+          style: {
+            fontSize: "14px",
+          },
+        }
       );
 
       setIsLoading(false);
@@ -322,7 +338,7 @@ export default function TradeToken() {
           onClick={() => handleTrade("buy")}
           className="w-full mt-4 py-6 text-base cursor-pointer font-medium rounded-full bg-[#A6E264] hover:bg-[#95CC58] text-black"
         >
-          Buy PLNTD
+          Buy PLANTD
         </Button>
       )}
 

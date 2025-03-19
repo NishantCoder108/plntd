@@ -28,10 +28,10 @@ export default function Providers({ children }: { children: React.ReactNode }) {
                */
               routerConfig={extractRouterConfig(ourFileRouter)}
             />
-            {/* <SocketProvider> */}
-            <Navbar />
-            {children}
-            {/* </SocketProvider> */};
+            <SocketProvider>
+              <Navbar />
+              {children}
+            </SocketProvider>
           </SolanaProvider>
         </ReactQueryProvider>
       </TRPCReactProvider>

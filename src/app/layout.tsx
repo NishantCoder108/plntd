@@ -43,7 +43,15 @@ export default function RootLayout({
             </main>
           </Suspense>
         </Providers>
-        <Toaster position="bottom-right" />
+        <Toaster
+          position="bottom-right"
+          toastOptions={{
+            style: {
+              minWidth: "max-content",
+              fontSize: "14px",
+            },
+          }}
+        />
       </body>
     </html>
   );
