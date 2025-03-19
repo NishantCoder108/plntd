@@ -1,7 +1,9 @@
 "use client";
+import TradeChart from "@/components/trading/TradeChart";
 import TradeToken from "@/components/trading/TradeToken";
 import TradingViewLightweight from "@/components/TradingChart";
 import TransactionTable from "@/components/txnHistory/txnTable";
+import User from "@/components/User";
 import { useSocket } from "@/contexts/socketContext";
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect } from "react";
@@ -42,6 +44,13 @@ export default function Home() {
         queryClient.invalidateQueries({
           queryKey: [
             ["txns", "readLatestTxns"],
+            { input: { state: "LATEST" } },
+          ],
+        });
+
+        queryClient.invalidateQueries({
+          queryKey: [
+            ["trading", "readLatestTrading"],
             { input: { state: "LATEST" } },
           ],
         });
@@ -86,6 +95,10 @@ export default function Home() {
       </div>
       <div className="mt-20">
         <TransactionTable />
+      </div>
+
+      <div className="flex items-center justify-center bg-amber-400 h-max">
+        <TradeChart />
       </div>
     </div>
   );
