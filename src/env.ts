@@ -9,7 +9,6 @@ export const env = createEnv({
   server: {
     // DATABASE_URL: z.string().url(),
     NEXT_CHART_API_URL: z.string().url(),
-    NEXT_SOCKET_URL: z.string().url(),
     NODE_ENV: z
       .enum(["development", "test", "production"])
       .default("development"),
@@ -46,6 +45,7 @@ export const env = createEnv({
     NEXT_PUBLIC_MINTER_PUBLIC_KEY: z.string(),
     NEXT_PUBLIC_WEBHOOK_URL: z.string(),
     NEXT_PUBLIC_PLNTD_SOL_ADDRESS: z.string(),
+    NEXT_PUBLIC_SOCKET_URL: z.string().url(),
   },
 
   /**
@@ -63,7 +63,7 @@ export const env = createEnv({
     NODE_ENV: process.env.NODE_ENV,
     NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
     // NEXTAUTH_URL: process.env.NEXTAUTH_URL,
-    NEXT_SOCKET_URL: process.env.NEXT_PUBLIC_SOCKET_URL,
+    NEXT_PUBLIC_SOCKET_URL: process.env.NEXT_PUBLIC_SOCKET_URL,
     // RPC_URL: process.env.RPC_URL,
     // NEXT_PUBLIC_PARA_API_KEY: process.env.NEXT_PUBLIC_PARA_API_KEY,
     // SPORTSDATA_API_KEY: process.env.SPORTSDATA_API_KEY,
