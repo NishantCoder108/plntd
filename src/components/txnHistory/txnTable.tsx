@@ -14,11 +14,17 @@ import { api } from "@/trpc/react";
 import Link from "next/link";
 import { formatString } from "@/lib/utils";
 import { TransactionSkeletonLoader } from "../common/TableSkeleton";
+import CopyToClipboard from "../common/CopyToClipboard";
 
 export default function TransactionTable() {
-  const { data, isLoading, error } = api.txns.readLatestTxns.useQuery({
-    state: "LATEST",
-  });
+  const { data, isLoading, error } = api.txns.readLatestTxns.useQuery(
+    {
+      state: "LATEST",
+    },
+    {
+      staleTime: Infinity,
+    }
+  );
 
   if (isLoading) return <TransactionSkeletonLoader />;
 
@@ -52,10 +58,16 @@ export default function TransactionTable() {
                   <TableCell className="py-4">{transaction.id}</TableCell>
                   <TableCell className="py-4">{transaction.amount}</TableCell>
                   <TableCell className="py-4 text-center">
-                    {formatString(transaction.from, 5, 5)}
+                    <div className="flex items-center justify-center gap-1">
+                      <span>{formatString(transaction.from, 5, 5)}</span>
+                      <CopyToClipboard message={transaction.from} />
+                    </div>
                   </TableCell>
                   <TableCell className="py-4 text-center">
-                    {formatString(transaction.to, 5, 5)}
+                    <div className="flex items-center justify-center gap-1">
+                      <span>{formatString(transaction.to, 5, 5)}</span>
+                      <CopyToClipboard message={transaction.to} />
+                    </div>
                   </TableCell>
                   <TableCell className="whitespace-nowrap text-center py-4">
                     {new Date(
