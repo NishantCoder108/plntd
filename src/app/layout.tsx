@@ -3,6 +3,7 @@ import { Roboto } from "next/font/google";
 import "./globals.css";
 import Providers from "./provider";
 import { Suspense } from "react";
+import { Analytics } from "@vercel/analytics/react";
 import { Toaster } from "react-hot-toast";
 // const geistSans = Geist({
 //   variable: "--font-geist-sans",
@@ -66,6 +67,7 @@ export default function RootLayout({
           >
             <main className="relative max-w-screen min-h-screen">
               {children}
+              <Analytics />
             </main>
           </Suspense>
         </Providers>
