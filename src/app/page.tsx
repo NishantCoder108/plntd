@@ -18,7 +18,7 @@ export default function Home() {
   useEffect(() => {
     if (!socket) return;
 
-    const handleTokenTransfer = (data: IData) => {
+    const handleTokenTransfer = async (data: IData) => {
       if (data.status === "PENDING") {
         toast.loading(data.message, {
           style: {
@@ -39,19 +39,21 @@ export default function Home() {
           },
         });
 
-        queryClient.invalidateQueries({
-          queryKey: [
-            ["txns", "readLatestTxns"],
-            { input: { state: "LATEST" } },
-          ],
-        });
+        // queryClient.invalidateQueries({
+        //   queryKey: [
+        //     ["txns", "readLatestTxns"],
+        //     { input: { state: "LATEST" } },
+        //   ],
+        // });
 
-        queryClient.invalidateQueries({
-          queryKey: [
-            ["trading", "readLatestTrading"],
-            { input: { state: "LATEST" } },
-          ],
-        });
+        // queryClient.invalidateQueries({
+        //   queryKey: [
+        //     ["trading", "readLatestTrading"],
+        //     { input: { state: "ALL" } },
+        //   ],
+        // });
+
+        await queryClient.refetchQueries();
       }
 
       // if (data.status === "FAILED") {
