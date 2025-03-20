@@ -15,9 +15,9 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     const newSocket = io(SOCKET_URL, {
-      transports: ["websocket"], // Use WebSockets only
-      reconnection: true, // Enable automatic reconnection
-      reconnectionAttempts: 5, // Limit reconnection attempts
+      transports: ["websocket"],
+      reconnection: true,
+      reconnectionAttempts: 5,
     });
 
     setSocket(newSocket);

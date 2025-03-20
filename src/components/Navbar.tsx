@@ -1,11 +1,8 @@
 "use client";
-import logoImg from "/public/logo.svg";
-
 import {
   BaseWalletMultiButton,
   WalletModalProvider,
 } from "@solana/wallet-adapter-react-ui";
-import Image from "next/image";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { WALLET_LABELS } from "@/constants/wallet";
 import { TreePalm } from "lucide-react";
@@ -18,7 +15,6 @@ const Navbar = () => {
       <div className="flex py-2  md:py-4   justify-between  items-center mb-8">
         <div className="flex items-center ">
           <div>
-            {/* <Image src={logoImg} title="plntd logo" alt="logo" width={55} /> */}
             <TreePalm color="#A3DE83" size={45} />
           </div>
         </div>

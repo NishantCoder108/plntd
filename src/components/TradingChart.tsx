@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 import React, { useState, useEffect, useRef, memo } from "react";
 import {
@@ -301,7 +302,6 @@ const TradingViewLightweight = ({ symbol, timeframe }: any) => {
 
   return loading || loadingData ? (
     <div className="f-full h-full flex items-center text-white justify-center">
-      {/* <Loader /> */}
       Loading...
     </div>
   ) : (
@@ -311,10 +311,6 @@ const TradingViewLightweight = ({ symbol, timeframe }: any) => {
         position: "absolute",
         width: "100%",
         height: "30rem",
-        // marginBottom: "5rem",
-        // border: "2px solid red",
-        // paddingBottom: "5rem",
-        // borderRadius: "2rem",
       }}
     />
   );
