@@ -54,18 +54,18 @@ export default function Home() {
         });
       }
 
-      if (data.status === "FAILED") {
-        toast.remove();
-        toast.error(data.message, {
-          style: {
-            fontSize: "14px",
-          },
-        });
-      }
+      // if (data.status === "FAILED") {
+      //   toast.remove();
+      //   toast.error(data.message, {
+      //     style: {
+      //       fontSize: "14px",
+      //     },
+      //   });
+      // }
     };
 
     socket.on("TOKEN_TRANSFER", handleTokenTransfer);
-    socket.on("TOKEN_TRANSFER_FAILED", handleTokenTransfer);
+    // socket.on("TOKEN_TRANSFER_FAILED", handleTokenTransfer);
     socket.on("TRANSFER_PLANTD_TOKEN", handleTokenTransfer);
     socket.on("TOKEN_TRANSFER_SUCCESS", handleTokenTransfer);
     socket.on("TOKEN_BURN_STARTED", handleTokenTransfer);
@@ -73,7 +73,7 @@ export default function Home() {
 
     return () => {
       socket.off("TOKEN_TRANSFER", handleTokenTransfer);
-      socket.off("TOKEN_TRANSFER_FAILED", handleTokenTransfer);
+      // socket.off("TOKEN_TRANSFER_FAILED", handleTokenTransfer);
       socket.off("TRANSFER_PLANTD_TOKEN", handleTokenTransfer);
       socket.off("TOKEN_TRANSFER_SUCCESS", handleTokenTransfer);
       socket.off("TOKEN_BURN_STARTED", handleTokenTransfer);

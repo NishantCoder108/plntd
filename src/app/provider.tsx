@@ -10,8 +10,14 @@ import { extractRouterConfig } from "uploadthing/server";
 import SolanaProvider from "@/components/solana/solana-provider";
 import { SocketProvider } from "@/contexts/socketContext";
 import Navbar from "@/components/Navbar";
+import { env } from "@/env";
 
 export default function Providers({ children }: { children: React.ReactNode }) {
+  if (env.NODE_ENV === "production") {
+    console.log = () => {};
+    console.warn = () => {};
+    console.error = () => {};
+  }
   return (
     <>
       {/* // <SessionProvider> */}
