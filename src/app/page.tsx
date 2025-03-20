@@ -1,9 +1,7 @@
 "use client";
 import TradeChart from "@/components/trading/TradeChart";
 import TradeToken from "@/components/trading/TradeToken";
-import TradingViewLightweight from "@/components/TradingChart";
 import TransactionTable from "@/components/txnHistory/txnTable";
-import User from "@/components/User";
 import { useSocket } from "@/contexts/socketContext";
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect } from "react";
@@ -85,20 +83,16 @@ export default function Home() {
 
   return (
     <div className="">
-      <div className="flex flex-col md:flex-row gap-4 md:gap-8 ">
-        <div className="h-[31rem]  relative w-[75%] overflow-hidden  py-4 bg-[#282828] rounded-4xl ">
-          <TradingViewLightweight symbol={"AAPL"} timeframe={"60m"} />
+      <div className="flex flex-col lg:flex-row gap-4 md:gap-8 ">
+        <div className="w-full lg:w-[75%]   py-4 bg-[#282828] rounded-4xl ">
+          <TradeChart />
         </div>
-        <div className="w-[25%] ">
+        <div className="w-full mt-8 lg:mt-0 lg:w-[25%] ">
           <TradeToken />
         </div>
       </div>
-      <div className="mt-20">
+      <div className="mt-8 lg:mt-20">
         <TransactionTable />
-      </div>
-
-      <div className="flex items-center justify-center bg-amber-400 h-max">
-        <TradeChart />
       </div>
     </div>
   );
