@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 import React, { useState, useEffect, useRef, memo } from "react";
@@ -66,8 +67,8 @@ const TradingViewLightweight = ({ symbol, timeframe }: any) => {
           if (data?.statusText == "OK") {
             console.log("data?.data", data?.data);
 
-            let d: any = [];
-            let volume_arr: any = [];
+            const d: any = [];
+            const volume_arr: any = [];
             data?.data?.data?.time?.forEach(
               (timestamp: number, idx: number) => {
                 d.push({
